@@ -1,6 +1,5 @@
 {
   "expo": {
-    "plugins": [ [ "@react-native-voice/voice", { "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone", "speechRecogntionPermission": "Allow $(PRODUCT_NAME) to securely recognize user speech" } ] ],
     "name": "OpenAIAssistant",
     "slug": "OpenAIAssistant",
     "version": "1.0.0",
@@ -22,10 +21,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.mbryan13.OpenAIAssistant"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "97a3461b-8503-427c-b7c6-4f22a1eed454"
+      }
     }
   }
 }

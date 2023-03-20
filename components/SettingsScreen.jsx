@@ -6,6 +6,7 @@ const STORAGE_KEY = 'apiKey';
 
 const SettingsScreen = () => {
   const [apiKey, setApiKey] = useState('');
+  const [recentlySaved, setRecentlySaved] = useState(false);
 
   useEffect(() => {
     SecureStore.getItemAsync(STORAGE_KEY)
@@ -19,27 +20,37 @@ const SettingsScreen = () => {
 
   const handleSave = () => {
     SecureStore.setItemAsync(STORAGE_KEY, apiKey)
-      .then(() => console.log('API key saved successfully!'))
+      .then(() => {
+        setRecentlySaved(true);
+        setTimeout(() => setRecentlySaved(false), 3000);
+      })
       .catch(error => console.log(error));
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>API Key</Text>
-      <TextInput
-        style={styles.input}
-        value={apiKey}
-        onChangeText={setApiKey}
-        secureTextEntry
-      />
-      <Button title="Save" onPress={handleSave} />
+    <View style={styles.mainContainer}>
+      <View style={styles.container}>
+        <Text style={styles.label}>API Key</Text>
+        <TextInput
+          style={styles.input}
+          value={apiKey}
+          onChangeText={setApiKey}
+          secureTextEntry
+        />
+        <Button title="Save" onPress={handleSave} />
+      </View>
+        {recentlySaved && <Text style={styles.saved}>API key saved!</Text>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
+    marginTop: 10,
     flex: 1,
+    gap: 15
+  },
+  container: {
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -55,6 +66,11 @@ const styles = StyleSheet.create({
     width: '80%',
     marginBottom: 20,
     fontSize: 30,
+  },
+  saved: {
+    textAlign: 'center',
+    color: 'green',
+    fontWeight: 'bold'
   }
 });
 

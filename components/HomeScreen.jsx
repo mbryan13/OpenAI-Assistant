@@ -1,10 +1,11 @@
 import {useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput, Button } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import * as Speech from 'expo-speech';
 import Voice from '@react-native-voice/voice';
+import { Picker } from '@react-native-picker/picker';
+
 
 const STORAGE_KEY = 'apiKey';
 
@@ -13,6 +14,9 @@ const HomeScreen = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
+  const [awaiting, setAwaiting] = useState(false);
+  const [model, setModel] = useState('gpt-3.5-turbo');
+
   console.log('home');
   console.log('response: ', (response));
   useFocusEffect(() => {
@@ -35,6 +39,7 @@ const HomeScreen = () => {
   useEffect(() => {
     if(response !== '') Speech.speak(response);
   }, [response]);
+
   const handleSpeak = () => {
     console.log('speak!');
     Speech.speak('oh wow!');
@@ -63,32 +68,64 @@ const HomeScreen = () => {
     }
   };
 
-  const submitQuery = async () => {
-    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+  const submitQuery = async (url, body) => {
+    setAwaiting(true);
     console.log('prompt: ', prompt);
-    const response = await fetch(apiUrl, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{"role": "user", "content": prompt}],
-        max_tokens: 1000
-      })
+      body: JSON.stringify(body)
     });
   
     if (!response.ok) {
       const error = await response.text();
+      setAwaiting(false);
       throw new Error(`Failed to generate text from OpenAI API: ${error}`);
     }
   
     const data = await response.json();
     console.log('data: ', data);
-    setResponse(data.choices[0].message.content);
+    return data;
   }
-  
+
+  const modelQueries = {
+    'gpt-3.5-turbo': async () => {
+      const url = 'https://api.openai.com/v1/chat/completions';
+      const body = {
+        model: model,
+        messages: [{"role": "user", "content": prompt}],
+        max_tokens: 1000
+      }
+      const response = await submitQuery(url, body);
+      setAwaiting(false);
+      setResponse(response.choices[0].message.content);
+    },
+    'gpt-4': async () => {
+      const url = 'https://api.openai.com/v1/chat/completions';
+      const body = {
+        model: model,
+        messages: [{"role": "user", "content": prompt}],
+        max_tokens: 1000
+      }
+      const response = await submitQuery(url, body);
+      setAwaiting(false);
+      setResponse(response.choices[0].message.content);
+    },
+    'davinci': async () => {
+      const url = 'https://api.openai.com/v1/completions';
+      const body = {
+        model: 'davinci',
+        prompt: prompt,
+        max_tokens: 100
+      }
+      const response = await submitQuery(url, body);
+      setAwaiting(false);
+      setResponse(response.choices[0].text);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -104,16 +141,26 @@ const HomeScreen = () => {
               source={{uri: 'https://seeklogo.com/images/O/open-ai-logo-8B9BFEDC26-seeklogo.com.png'}}
               style={styles.logo}
             />
-            <Text style={styles.text}>OpenAI</Text>
         </View>
       </TouchableOpacity>
+      <Picker
+        style={styles.picker}
+        selectedValue={model}
+        onValueChange={(itemValue, itemIndex) => setModel(itemValue)}>
+        <Picker.Item label="GPT-3.5" value="gpt-3.5-turbo" />
+        <Picker.Item label="Davinci" value="davinci" />
+        <Picker.Item label="GPT-4" value="gpt-4" />
+      </Picker>
+      {/* <Text style={styles.text}>OpenAI</Text> */}
       <View style={styles.inputContainer}>
         <TextInput
+          multiline={true}
           value={prompt}
           style={styles.input}
           onChangeText={setPrompt}
         />
-        <Button title="Submit" onPress={() => submitQuery()} />
+        {!awaiting && <Button title="Submit" onPress={() => modelQueries[model]()} />}
+        {awaiting && <Button title="Pending..."/>}
       </View>
       {isRecording && (
         <View style={styles.recording}>
@@ -134,7 +181,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 200,
-    marginTop: 100,
+    marginTop: 50,
     marginBottom: 15
   },
   text: {
@@ -148,6 +195,11 @@ const styles = StyleSheet.create({
     width: 50,
     right: 5,
     top: 5
+  },
+  picker: {
+    width: 150,
+    height: 50,
+    // backgroundColor: 'blue'
   },
   recording: {
     flexDirection: 'row',
@@ -169,7 +221,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 10,
     textAlignVertical: 'top',
-    fontSize: 20
+    fontSize: 20,
   }
 });
 
