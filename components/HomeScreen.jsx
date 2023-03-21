@@ -143,14 +143,16 @@ const HomeScreen = () => {
             />
         </View>
       </TouchableOpacity>
-      <Picker
-        style={styles.picker}
-        selectedValue={model}
-        onValueChange={(itemValue, itemIndex) => setModel(itemValue)}>
-        <Picker.Item label="GPT-3.5" value="gpt-3.5-turbo" />
-        <Picker.Item label="Davinci" value="davinci" />
-        <Picker.Item label="GPT-4" value="gpt-4" />
-      </Picker>
+      <View style={styles.pickerContainer}>
+        <Picker
+          style={styles.picker}
+          selectedValue={model}
+          onValueChange={(itemValue, itemIndex) => setModel(itemValue)}>
+          <Picker.Item label="GPT-3.5" value="gpt-3.5-turbo" />
+          <Picker.Item label="Davinci" value="davinci" />
+          <Picker.Item label="GPT-4" value="gpt-4" />
+        </Picker>
+      </View>
       {/* <Text style={styles.text}>OpenAI</Text> */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -196,10 +198,16 @@ const styles = StyleSheet.create({
     right: 5,
     top: 5
   },
+  pickerContainer: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 30
+  },
   picker: {
     width: 150,
-    height: 50,
-    // backgroundColor: 'blue'
+    height: 30,
   },
   recording: {
     flexDirection: 'row',
@@ -215,7 +223,7 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     borderRadius: 10,
-    borderColor: 'black',
+    borderColor: 'gray',
     borderWidth: 1,
     height: 200, 
     marginBottom: 15,
