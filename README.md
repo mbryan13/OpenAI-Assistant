@@ -1,5 +1,5 @@
 ## OpenAI-Assistant
-This is a React Native mobile application that uses OpenAI's Codex API to generate text based on user prompts.
+This is a React Native mobile application that uses OpenAI's API to generate text based on user prompts.
 
 ### Requirements
 To run the app, you will need to have Node.js and Expo CLI installed.
