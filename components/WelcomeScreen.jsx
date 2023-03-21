@@ -97,7 +97,10 @@ const WelcomeScreen = () => {
     )
   }
 
-  else navigation.navigate('Home');
+  else {
+    clearInterval(intervalID.current);
+    navigation.navigate('Home');
+  };
 
 }
 
