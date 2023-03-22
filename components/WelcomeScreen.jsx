@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput,Button, ActivityIndicator, StyleSheet, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
@@ -17,7 +17,7 @@ const WelcomeScreen = () => {
   const navigation = useNavigation();
 
   const STORAGE_KEY = 'apiKey';
-  const welcomeMessages = ['Hello there!', 'I\'m your OpenAI assistant.', 'Let\'s get you set up.', 'Enter your OpenAI API key.', 'You\'re good to go! You can always change your API key in the settings.'];
+  const welcomeMessages = ['Hello there!', 'I\'m your OpenAI assistant.', 'Let\'s get you set up.', 'Enter your OpenAI API key.', 'You\'re good to go! You can always change your API key in settings.'];
   const fadeInDuration = 500;
   const fadeOutDuration = 500;
 
@@ -64,7 +64,7 @@ const WelcomeScreen = () => {
   useEffect(() => {
     SecureStore.getItemAsync('hasSetup').then((value) => {
       if (value === 'true') {
-        setHasSetup(true);
+        // setHasSetup(true);
       } else {
         setHasSetup(false);
       }
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 100
+    justifyContent: 'center'
   },
   inputContainer: {
   },

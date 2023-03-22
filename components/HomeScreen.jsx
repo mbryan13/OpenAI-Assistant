@@ -1,5 +1,5 @@
 import {useEffect, useState, useCallback } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput, Button } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput, Button, Animated } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 import * as Speech from 'expo-speech';
@@ -16,9 +16,10 @@ const HomeScreen = () => {
   const [response, setResponse] = useState('');
   const [awaiting, setAwaiting] = useState(false);
   const [model, setModel] = useState('gpt-3.5-turbo');
+  const [step, setStep] = useState(1);
 
   console.log('home');
-  console.log('response: ', (response));
+  console.log('step: ', step);
   useFocusEffect(() => {
     const getApiKey = async () => {
       const value = await SecureStore.getItemAsync(STORAGE_KEY);
@@ -128,22 +129,26 @@ const HomeScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.settings} onPress={handlePress}>
+    <View style={[StyleSheet.absoluteFillObject, styles.container]}>
+      {/* <View style={styles.tutorialContainer}>
+        <Text>hello</Text>
+      </View> */}
+      {step >= 1 && step < 5 && <TouchableOpacity style={[StyleSheet.absoluteFillObject, styles.overlay]} onPress={() => setStep(prevStep => prevStep + 1)}></TouchableOpacity>}
+      <TouchableOpacity style={{...styles.settings, zIndex: step === 4 ? 2 : 0}} onPress={handlePress}>
         <Image
           source={{uri: 'https://www.citypng.com/public/uploads/preview/black-round-cog-gear-icon-png-image-11641123347s4r0ejgdft.png'}}
           style={styles.settings}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleStartRecording}>
-        <View style={styles.container}>
+      <TouchableOpacity style={{zIndex: 2, backgroundColor: step === 1 ? 'white' : 'transparent'}} onPress={handleStartRecording}>
+        <View style={styles.logoContainer}>
             <Image
               source={{uri: 'https://seeklogo.com/images/O/open-ai-logo-8B9BFEDC26-seeklogo.com.png'}}
               style={styles.logo}
             />
         </View>
       </TouchableOpacity>
-      <View style={styles.pickerContainer}>
+      <View pointerEvents={step > 0 && step < 5 ? 'none' : 'auto'} style={{...styles.pickerContainer, zIndex: step === 2 ? 2 : 1, backgroundColor: step === 2 ? 'white' : null}}>
         <Picker
           style={styles.picker}
           selectedValue={model}
@@ -154,11 +159,11 @@ const HomeScreen = () => {
         </Picker>
       </View>
       {/* <Text style={styles.text}>OpenAI</Text> */}
-      <View style={styles.inputContainer}>
+      <View pointerEvents={step > 0 && step < 5 ? 'none' : 'auto'} style={{...styles.inputContainer, zIndex: step === 3 ? 2 : 1}}>
         <TextInput
           multiline={true}
           value={prompt}
-          style={styles.input}
+          style={{...styles.input, zIndex: step === 3 ? 2 : 1, backgroundColor: step === 3 ? 'white' : null}}
           onChangeText={setPrompt}
         />
         {!awaiting && <Button title="Submit" onPress={() => modelQueries[model]()} />}
@@ -180,11 +185,31 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
   },
+  tutorialContainer: {
+    backgroundColor: 'white',
+    borderColor: 'black',
+    borderWidth: 1,
+    width: '90%',
+    height: 50,
+    position: 'absolute',
+    top: 0,
+    // left: ',
+    zIndex: 3
+  },
+  overlay: {
+    backgroundColor: 'black',
+    opacity: .8,
+    zIndex: 1
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginTop: 40,
+  },
   logo: {
     width: 200,
     height: 200,
     marginTop: 50,
-    marginBottom: 15
+    marginBottom: 15,
   },
   text: {
     fontSize: 25,
@@ -196,14 +221,15 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     right: 5,
-    top: 5
+    top: 5,
   },
   pickerContainer: {
     borderColor: 'gray',
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 30
+    height: 30,
+    marginTop: 10
   },
   picker: {
     width: 150,
