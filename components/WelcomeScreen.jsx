@@ -29,7 +29,7 @@ const WelcomeScreen = () => {
         Speech.speak(welcomeMessages[welcomeTextIndex.current]);
         setDate(new Date());
         setTimeout(() => {
-          navigation.navigate('Home');
+          navigation.replace('Home');
         }, 4500);
       })
       .catch(error => console.log(error));
@@ -99,7 +99,7 @@ const WelcomeScreen = () => {
 
   else {
     clearInterval(intervalID.current);
-    navigation.navigate('Home');
+    navigation.replace('Home');
   };
 
 }

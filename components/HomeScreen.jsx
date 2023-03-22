@@ -37,9 +37,11 @@ const HomeScreen = () => {
     navigation.navigate('Settings');
   };
 
-  useEffect(() => {
-    if(response !== '') Speech.speak(response);
-  }, [response]);
+  // useEffect(() => {
+  //   if(response !== '') {
+  //     Speech.speak(response);
+  //   }
+  // }, [response]);
 
   const handleSpeak = () => {
     console.log('speak!');
@@ -102,7 +104,8 @@ const HomeScreen = () => {
       }
       const response = await submitQuery(url, body);
       setAwaiting(false);
-      setResponse(response.choices[0].message.content);
+      return response.choices[0].message.content;
+      // setResponse(response.choices[0].message.content);
     },
     'gpt-4': async () => {
       const url = 'https://api.openai.com/v1/chat/completions';
@@ -113,7 +116,8 @@ const HomeScreen = () => {
       }
       const response = await submitQuery(url, body);
       setAwaiting(false);
-      setResponse(response.choices[0].message.content);
+      return response.choices[0].message.content;
+      // setResponse(response.choices[0].message.content);
     },
     'davinci': async () => {
       const url = 'https://api.openai.com/v1/completions';
@@ -124,8 +128,14 @@ const HomeScreen = () => {
       }
       const response = await submitQuery(url, body);
       setAwaiting(false);
-      setResponse(response.choices[0].text);
+      return response.choices[0].text;
+      // setResponse(response.choices[0].text);
     }
+  }
+
+  const handleSubmit = async () => {
+    const response = (await modelQueries[model]()).trim();
+    navigation.navigate('Response', {response});
   }
 
   return (
@@ -140,7 +150,7 @@ const HomeScreen = () => {
           style={styles.settings}
         />
       </TouchableOpacity>
-      <TouchableOpacity style={{zIndex: 2, backgroundColor: step === 1 ? 'white' : 'transparent'}} onPress={handleStartRecording}>
+      <TouchableOpacity style={{zIndex: 2, backgroundColor: step === 1 ? 'white' : 'transparent', marginTop: 40}} onPress={handleStartRecording}>
         <View style={styles.logoContainer}>
             <Image
               source={{uri: 'https://seeklogo.com/images/O/open-ai-logo-8B9BFEDC26-seeklogo.com.png'}}
@@ -166,7 +176,7 @@ const HomeScreen = () => {
           style={{...styles.input, zIndex: step === 3 ? 2 : 1, backgroundColor: step === 3 ? 'white' : null}}
           onChangeText={setPrompt}
         />
-        {!awaiting && <Button title="Submit" onPress={() => modelQueries[model]()} />}
+        {!awaiting && <Button title="Submit" onPress={() => handleSubmit()} />}
         {awaiting && <Button title="Pending..."/>}
       </View>
       {isRecording && (
@@ -203,13 +213,13 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginTop: 40,
+    padding: 10
   },
   logo: {
     width: 200,
     height: 200,
-    marginTop: 50,
-    marginBottom: 15,
+    // marginTop: 50,
+    // marginBottom: 15,
   },
   text: {
     fontSize: 25,
@@ -254,8 +264,10 @@ const styles = StyleSheet.create({
     height: 200, 
     marginBottom: 15,
     padding: 10,
+    paddingHorizontal: 20,
     textAlignVertical: 'top',
     fontSize: 20,
+    lineHeight: 25
   }
 });
 
