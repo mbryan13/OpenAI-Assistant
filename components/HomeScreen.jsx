@@ -13,6 +13,7 @@ const HomeScreen = () => {
   const [apiKey, setApiKey] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [prompt, setPrompt] = useState('');
+  const [sentPrompt, setSentPrompt] = useState('');
   const [response, setResponse] = useState('');
   const [awaiting, setAwaiting] = useState(false);
   const [model, setModel] = useState('gpt-3.5-turbo');
@@ -33,8 +34,8 @@ const HomeScreen = () => {
 
   const navigation = useNavigation();
 
-  const handlePress = () => {
-    navigation.navigate('Settings');
+  const handlePress = page => {
+    navigation.navigate(page);
   };
 
   // useEffect(() => {
@@ -135,7 +136,7 @@ const HomeScreen = () => {
 
   const handleSubmit = async () => {
     const response = (await modelQueries[model]()).trim();
-    navigation.navigate('Response', {response});
+    navigation.navigate('Response', {prompt, response});
   }
 
   return (
@@ -144,7 +145,13 @@ const HomeScreen = () => {
         <Text>hello</Text>
       </View> */}
       {step >= 1 && step < 5 && <TouchableOpacity style={[StyleSheet.absoluteFillObject, styles.overlay]} onPress={() => setStep(prevStep => prevStep + 1)}></TouchableOpacity>}
-      <TouchableOpacity style={{...styles.settings, zIndex: step === 4 ? 2 : 0}} onPress={handlePress}>
+      <TouchableOpacity style={{...styles.logs, zIndex: step === 4 ? 2 : 0}} onPress={() => handlePress('Logs')}>
+        <Image
+          source={{uri: 'https://w7.pngwing.com/pngs/428/775/png-transparent-history-icon-order-icon-angle-text-rectangle.png'}}
+          style={styles.settings}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity style={{...styles.settings, zIndex: step === 4 ? 2 : 0}} onPress={() => handlePress('Settings')}>
         <Image
           source={{uri: 'https://www.citypng.com/public/uploads/preview/black-round-cog-gear-icon-png-image-11641123347s4r0ejgdft.png'}}
           style={styles.settings}
@@ -232,6 +239,13 @@ const styles = StyleSheet.create({
     width: 50,
     right: 5,
     top: 5,
+  },
+  logs: {
+    position: 'absolute',
+    height: 40,
+    width: 40,
+    right: 5,
+    top: 60,
   },
   pickerContainer: {
     borderColor: 'gray',

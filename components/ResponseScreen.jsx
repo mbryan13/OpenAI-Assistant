@@ -1,17 +1,30 @@
 import {useEffect} from 'react';
 import { Text, View, ScrollView, Button, TouchableOpacity } from 'react-native';
 import * as Speech from 'expo-speech';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ResponseScreen = ({route}) => {
-  const { response } = route.params;
+  const { response, prompt } = route.params;
+  console.log(prompt);
   useEffect(() => {
     setTimeout(() => {
       Speech.speak(response);
     }, 2000)
-  }, [])
+    storeData();
+  }, [prompt])
 
   const stopSpeech = () => Speech.stop();
-
+  const storeData = async () => {
+    try {
+      const logs = await AsyncStorage.getItem('apiLogs');
+      const parsedLogs = logs ? JSON.parse(logs): [];
+      const newLogs = [...parsedLogs, { prompt, response, timestamp: Date.now() }];
+      console.log('updated logs: ', newLogs);
+      await AsyncStorage.setItem('apiLogs', JSON.stringify(newLogs));
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={stopSpeech}>
