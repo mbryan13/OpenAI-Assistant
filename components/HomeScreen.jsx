@@ -18,6 +18,9 @@ const HomeScreen = () => {
   const [awaiting, setAwaiting] = useState(false);
   const [model, setModel] = useState('gpt-3.5-turbo');
   const [step, setStep] = useState(1);
+  const [isTutorial, setIsTutorial] = useState();
+
+  const tutorialMessages = ['Click on the logo to activate voice input.', 'The dropdown menu allows you to choose the OpenAI model to query.', 'Alternatively, type in your prompt in the input box.', 'Access settings and past logs in the top right corner.' ];
 
   console.log('home');
   console.log('step: ', step);
@@ -37,12 +40,6 @@ const HomeScreen = () => {
   const handlePress = page => {
     navigation.navigate(page);
   };
-
-  // useEffect(() => {
-  //   if(response !== '') {
-  //     Speech.speak(response);
-  //   }
-  // }, [response]);
 
   const handleSpeak = () => {
     console.log('speak!');
@@ -74,7 +71,6 @@ const HomeScreen = () => {
 
   const submitQuery = async (url, body) => {
     setAwaiting(true);
-    console.log('prompt: ', prompt);
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -91,7 +87,6 @@ const HomeScreen = () => {
     }
   
     const data = await response.json();
-    console.log('data: ', data);
     return data;
   }
 
@@ -139,12 +134,16 @@ const HomeScreen = () => {
     navigation.navigate('Response', {prompt, response});
   }
 
+  const handleStep = () => {
+    setStep(prevStep => prevStep + 1)
+  }
+
   return (
     <View style={[StyleSheet.absoluteFillObject, styles.container]}>
-      {/* <View style={styles.tutorialContainer}>
-        <Text>hello</Text>
-      </View> */}
-      {step >= 1 && step < 5 && <TouchableOpacity style={[StyleSheet.absoluteFillObject, styles.overlay]} onPress={() => setStep(prevStep => prevStep + 1)}></TouchableOpacity>}
+      {step >= 1 && step < 5 && <View style={styles.tutorialContainer}>
+        <Text style={styles.tutorialText}>{tutorialMessages[step - 1]}</Text>
+      </View>}
+      {step >= 1 && step < 5 && <TouchableOpacity style={[StyleSheet.absoluteFillObject, styles.overlay]} onPress={() => handleStep()}></TouchableOpacity>}
       <TouchableOpacity style={{...styles.logs, zIndex: step === 4 ? 2 : 0}} onPress={() => handlePress('Logs')}>
         <Image
           source={{uri: 'https://w7.pngwing.com/pngs/428/775/png-transparent-history-icon-order-icon-angle-text-rectangle.png'}}
@@ -204,14 +203,20 @@ const styles = StyleSheet.create({
   },
   tutorialContainer: {
     backgroundColor: 'white',
-    borderColor: 'black',
+    borderColor: 'yellow',
     borderWidth: 1,
     width: '90%',
-    height: 50,
+    height: 100,
     position: 'absolute',
-    top: 0,
-    // left: ',
-    zIndex: 3
+    bottom: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 3,
+    borderRadius: 5,
+    padding: 10
+  },
+  tutorialText: {
+    fontSize: 20
   },
   overlay: {
     backgroundColor: 'black',
