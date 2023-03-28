@@ -46,9 +46,10 @@ const SettingsScreen = () => {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginTop: 10,
+    paddingTop: 20,
     flex: 1,
-    gap: 15
+    gap: 15,
+    backgroundColor: 'rgba(68,70,84,1)'
   },
   container: {
     alignItems: 'center',
@@ -57,15 +58,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 28,
     marginBottom: 10,
+    color: 'white'
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 4,
+    backgroundColor: 'black',
     paddingHorizontal: 10,
     width: '80%',
     marginBottom: 20,
     fontSize: 30,
+    color: 'white'
   },
   saved: {
     textAlign: 'center',

@@ -16,7 +16,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}}/>
-        <Stack.Screen name="Home" component={HomeScreen} options={{headerLeft: null}}/>
+        <Stack.Screen name="Home" component={HomeScreen} options={{headerLeft: null, headerShown: false}}/>
         <Stack.Screen name="Logs" component={LogsScreen}/>
         <Stack.Screen name="Log" component={FocusedLogScreen}/>
         <Stack.Screen name="Settings" component={SettingsScreen}/>

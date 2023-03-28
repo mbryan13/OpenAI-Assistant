@@ -31,7 +31,8 @@ const LogsScreen = () => {
 const styles = {
   container: {
     flex: 1,
-    padding: 20
+    padding: 20,
+    backgroundColor: 'rgba(68,70,84,1)',
   },
   contentContainer: {
     gap: 10,

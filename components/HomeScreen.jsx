@@ -1,5 +1,5 @@
 import {useEffect, useState, useCallback } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput, Button, Animated } from 'react-native';
+import { StatusBar, StyleSheet, View, Image, Text, TouchableOpacity, TextInput, Button, Animated, SafeAreaView } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 import * as Speech from 'expo-speech';
@@ -19,7 +19,6 @@ const HomeScreen = () => {
   const [model, setModel] = useState('gpt-3.5-turbo');
   const [step, setStep] = useState(1);
   const [isTutorial, setIsTutorial] = useState();
-
   const tutorialMessages = ['Click on the logo to activate voice input.', 'The dropdown menu allows you to choose the OpenAI model to query.', 'Alternatively, type in your prompt in the input box.', 'Access settings and past logs in the top right corner.' ];
 
   console.log('home');
@@ -139,7 +138,8 @@ const HomeScreen = () => {
   }
 
   return (
-    <View style={[StyleSheet.absoluteFillObject, styles.container]}>
+    <SafeAreaView style={[StyleSheet.absoluteFillObject, styles.container]}>
+      {/* <StatusBar backgroundColor="blue" barStyle="light-content" /> */}
       {step >= 1 && step < 5 && <View style={styles.tutorialContainer}>
         <Text style={styles.tutorialText}>{tutorialMessages[step - 1]}</Text>
       </View>}
@@ -164,7 +164,7 @@ const HomeScreen = () => {
             />
         </View>
       </TouchableOpacity>
-      <View pointerEvents={step > 0 && step < 5 ? 'none' : 'auto'} style={{...styles.pickerContainer, zIndex: step === 2 ? 2 : 1, backgroundColor: step === 2 ? 'white' : null}}>
+      <View pointerEvents={step > 0 && step < 5 ? 'none' : 'auto'} style={{...styles.pickerContainer, zIndex: step === 2 ? 2 : 1, backgroundColor: step === 2 ? 'white' : 'black'}}>
         <Picker
           style={styles.picker}
           selectedValue={model}
@@ -179,11 +179,12 @@ const HomeScreen = () => {
         <TextInput
           multiline={true}
           value={prompt}
-          style={{...styles.input, zIndex: step === 3 ? 2 : 1, backgroundColor: step === 3 ? 'white' : null}}
+          style={{...styles.input, zIndex: step === 3 ? 2 : 1, backgroundColor: step === 3 ? 'black' : 'black'}}
           onChangeText={setPrompt}
         />
-        {!awaiting && <Button title="Submit" onPress={() => handleSubmit()} />}
-        {awaiting && <Button title="Pending..."/>}
+        <TouchableOpacity onPress={() => handleSubmit()}>
+          <View style={styles.submitButton} ><Text style={styles.submitButtonText}>{awaiting ? 'Pending...' : 'Submit'}</Text></View>
+        </TouchableOpacity>
       </View>
       {isRecording && (
         <View style={styles.recording}>
@@ -193,17 +194,34 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
+    backgroundColor: 'rgba(68,70,84,1)',
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+  },
+  submitButton: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#1987ff',
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+    borderRadius: 2,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  submitButtonText: {
+    color: 'white',
+    fontSize: 20
   },
   tutorialContainer: {
-    backgroundColor: 'white',
-    borderColor: 'yellow',
+    backgroundColor: 'rgba(68,70,84,1)',
+    borderColor: 'rgba(255,255,255,0.5)',
     borderWidth: 1,
     width: '90%',
     height: 100,
@@ -216,16 +234,18 @@ const styles = StyleSheet.create({
     padding: 10
   },
   tutorialText: {
-    fontSize: 20
+    fontSize: 20,
+     color: 'white'
   },
   overlay: {
     backgroundColor: 'black',
-    opacity: .8,
+    opacity: .85,
     zIndex: 1
   },
   logoContainer: {
     alignItems: 'center',
-    padding: 10
+    padding: 10,
+    marginTop: 30
   },
   logo: {
     width: 200,
@@ -243,7 +263,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     right: 5,
-    top: 5,
+    top: 5
   },
   logs: {
     position: 'absolute',
@@ -253,7 +273,7 @@ const styles = StyleSheet.create({
     top: 60,
   },
   pickerContainer: {
-    borderColor: 'gray',
+    borderColor: 'rgba(255,255,255,0.5)',
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -263,6 +283,7 @@ const styles = StyleSheet.create({
   picker: {
     width: 150,
     height: 30,
+    color: 'white',
   },
   recording: {
     flexDirection: 'row',
@@ -273,12 +294,13 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '85%',
     borderRadius: 10,
-    marginTop: 30
+    marginTop: 30,
   },
   input: {
     width: '100%',
     borderRadius: 10,
-    borderColor: 'gray',
+    borderColor: 'rgba(255,255,255,0.5)',
+    color: 'white',
     borderWidth: 1,
     height: 200, 
     marginBottom: 15,

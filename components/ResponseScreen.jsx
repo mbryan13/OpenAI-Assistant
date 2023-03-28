@@ -39,9 +39,13 @@ const ResponseScreen = ({route}) => {
 
 const styles = {
   container: {
-    flex: 1,
-    margin: 15,
-    gap: 20
+    // flex: 1,
+    // margin: 15,
+    gap: 20,
+    backgroundColor: 'rgba(68,70,84,1)',
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+    height: '100%'
   },
   stopButton: {
     borderColor: 'black',
@@ -50,13 +54,19 @@ const styles = {
     borderRadius: 5,
     alignSelf: 'center',
     paddingVertical: 5,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    marginTop: 10
   },
   scrollContainer: {
     // flex: 1,
-    borderColor: 'black',
-    borderWidth: 1,
+    backgroundColor: 'black',
     borderRadius: 5,
+    margin: 10,
+    marginTop: 0,
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+    padding: 5,
+    flexGrow: 0
   },
   response: {
     fontSize: 25,
@@ -67,6 +77,7 @@ const styles = {
     position: 'relative',
     top: 0,
     left: 0,
+    color: 'white'
   }
 }
 

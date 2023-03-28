@@ -21,10 +21,12 @@ const styles = {
     padding: 30,
     borderColor: 'gray',
     borderWidth: 1,
-    borderRadius: 5
+    borderRadius: 5,
+    backgroundColor: 'black'
   },
   text: {
-    fontSize: 20
+    fontSize: 20,
+    color: 'white'
   }
 }
 export default Log;

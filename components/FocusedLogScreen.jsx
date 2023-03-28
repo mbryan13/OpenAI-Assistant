@@ -39,7 +39,7 @@ const FocusedLogScreen = ({route}) => {
         <View style={styles.page}>
           <Text style={styles.headerText}>Response</Text>
           <ScrollView style={styles.response}>
-            <Text style={styles.promptText}>{response}I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.</Text>
+            <Text style={styles.responseText}>{response}I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.</Text>
           </ScrollView>
         </View>
       </Swiper>
@@ -50,7 +50,7 @@ const FocusedLogScreen = ({route}) => {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: 'purple'
+    backgroundColor: '#343541',
     // padding: 20,
   },
   page: {
@@ -60,24 +60,27 @@ const styles = {
     paddingBottom: 30,
     alignItems: 'center', // center the content horizontally
     justifyContent: 'center', // center the content vertically
-    borderColor: 'black',
-    borderWidth: 1,
+    // borderColor: 'black',
+    // borderWidth: 1,
     flex: 1,
-    backgroundColor: 'yellow',
+    backgroundColor: 'rgba(68,70,84,1)',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderTopWidth: 0
   },
   prompt: {
-    backgroundColor: 'red',
+    backgroundColor: 'black',
     padding: 15,
-    borderColor: 'black',
+    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 3,
     marginTop: 10,
     marginBottom: 20,
   },
   response: {
-    backgroundColor: 'blue',
+    backgroundColor: 'black',
     padding: 15,
-    borderColor: 'black',
+    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 3,
     marginTop: 10,
@@ -87,18 +90,28 @@ const styles = {
   promptText: {
     lineHeight: 30,
     fontSize: 20,
-    color: 'white',
+    color: '#fff',
+  },
+  responseText: {
+    lineHeight: 30,
+    fontSize: 20,
+    color: '#fff', 
   },
   timestampText: {
     fontSize: 20,
     textAlign: 'center',
-    color: 'gray'
+    color: '#fff',
+    // marginTop: 10,
+    padding: 5,
+    borderColor: 'gray',
+    borderWidth: 1
   },
   headerText: {
     textAlign: 'left',
     width: Dimensions.get('window').width,
     paddingLeft: 12,
-    color: 'gray'
+    color: '#fff',
+    marginTop: 10
   }
 }
 
