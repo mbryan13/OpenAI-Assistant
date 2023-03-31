@@ -1,16 +1,16 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 
 const Log = ({prompt, response, timestamp}) => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Log', {prompt, response, timestamp})}>
-      <View style={styles.container}>
+    <TouchableHighlight style={styles.container} underlayColor="gray" onPress={() => navigation.navigate('Log', {prompt, response, timestamp})}>
+      <View>
         <Text style={styles.text}>{prompt}</Text>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight >
   )
 }
 

@@ -139,7 +139,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={[StyleSheet.absoluteFillObject, styles.container]}>
-      {/* <StatusBar backgroundColor="blue" barStyle="light-content" /> */}
+      <StatusBar barStyle="light-content" backgroundColor="black" />
       {step >= 1 && step < 5 && <View style={styles.tutorialContainer}>
         <Text style={styles.tutorialText}>{tutorialMessages[step - 1]}</Text>
       </View>}
