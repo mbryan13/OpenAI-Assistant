@@ -1,9 +1,11 @@
-import {useEffect} from 'react';
+import {useEffect, useContext} from 'react';
 import { Text, View, ScrollView, Button, TouchableOpacity } from 'react-native';
 import * as Speech from 'expo-speech';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ThemeContext } from '../themes/ThemeContext';
 
 const ResponseScreen = ({route}) => {
+  const {theme, toggleTheme} = useContext(ThemeContext);
   const { response, prompt } = route.params;
   console.log(prompt);
   useEffect(() => {
@@ -26,12 +28,12 @@ const ResponseScreen = ({route}) => {
     }
   };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.bgPrimary, borderColor: theme.borderPrimary }]}>
       <TouchableOpacity onPress={stopSpeech}>
         <View style={styles.stopButton}><Text style={{color: 'white'}}>Stop</Text></View>
       </TouchableOpacity>
-      <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.response}>{response}</Text>
+      <ScrollView style={[styles.scrollContainer, { backgroundColor: theme.bgSecondary }]}>
+        <Text style={[styles.response, { color: theme.textPrimary }]}>{response}</Text>
       </ScrollView>
     </View>
   )
@@ -39,11 +41,8 @@ const ResponseScreen = ({route}) => {
 
 const styles = {
   container: {
-    // flex: 1,
-    // margin: 15,
+
     gap: 20,
-    backgroundColor: 'rgba(68,70,84,1)',
-    borderColor: 'rgba(255,255,255,0.5)',
     borderWidth: 1,
     height: '100%'
   },
@@ -58,8 +57,6 @@ const styles = {
     marginTop: 10
   },
   scrollContainer: {
-    // flex: 1,
-    backgroundColor: 'black',
     borderRadius: 5,
     margin: 10,
     marginTop: 0,
@@ -77,7 +74,6 @@ const styles = {
     position: 'relative',
     top: 0,
     left: 0,
-    color: 'white'
   }
 }
 

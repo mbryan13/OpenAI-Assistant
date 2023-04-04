@@ -1,8 +1,15 @@
-import { useRef } from 'react';
-import { Text, View, ScrollView, Dimensions, PanResponder, Animated } from 'react-native';
+import { useRef, useContext } from 'react';
+import { Color, Text, View, ScrollView, Dimensions, PanResponder, Animated } from 'react-native';
 import Swiper from 'react-native-swiper';
+import { ThemeContext } from '../themes/ThemeContext';
+import { TinyColor } from '@ctrl/tinycolor';
+
+
+console.log('color: ', Color)
+
 
 const FocusedLogScreen = ({route}) => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const { response, prompt, timestamp } = route.params;
 
   const formatTimestamp = timestamp => {
@@ -23,23 +30,23 @@ const FocusedLogScreen = ({route}) => {
   
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.timestampText}>{formatTimestamp(timestamp)}</Text>
+    <View style={[styles.container, { backgroundColor: new TinyColor(theme.bgPrimary).darken(20).toString() }]}>
+      <Text style={[styles.timestampText, { color: theme.textPrimary, borderColor: theme.borderPrimary }]}>{formatTimestamp(timestamp)}</Text>
       <Swiper 
         loop={false}
         showsButtons={false}
         showsPagination={true}
       >
-        <View style={styles.page}>
-          <Text style={styles.headerText}>Prompt</Text>
-          <ScrollView style={styles.prompt}>
-            <Text style={styles.promptText}>{prompt}I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.</Text>
+        <View style={[styles.page, { backgroundColor: theme.bgPrimary, borderColor: theme.borderPrimary }]}>
+          <Text style={[styles.headerText, { color: theme.textPrimary }]}>Prompt</Text>
+          <ScrollView style={[styles.prompt, { backgroundColor: theme.bgSecondary }]}>
+            <Text style={[styles.promptText, { color: theme.textPrimary }]}>{prompt}I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.</Text>
           </ScrollView>
         </View>
-        <View style={styles.page}>
-          <Text style={styles.headerText}>Response</Text>
-          <ScrollView style={styles.response}>
-            <Text style={styles.responseText}>{response}I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.</Text>
+        <View style={[styles.page, { backgroundColor: theme.bgPrimary, borderColor: theme.borderPrimary }]}>
+          <Text style={[styles.headerText, { color: theme.textPrimary }]}>Response</Text>
+          <ScrollView style={[styles.response, { backgroundColor: theme.bgSecondary }]}>
+            <Text style={[styles.responseText, { color: theme.textPrimary }]}>{response}I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.I just wanted to drop you a quick note to follow up on my recent application for the [Job Title] role with [Company Name]. I applied via [application platform], but I wanted to reach out directly to express my strong interest in the position and let you know that I am available to answer any questions or provide any additional information that might be helpful.</Text>
           </ScrollView>
         </View>
       </Swiper>
@@ -50,8 +57,6 @@ const FocusedLogScreen = ({route}) => {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: '#343541',
-    // padding: 20,
   },
   page: {
     width: Dimensions.get('window').width, // width equal to the screen width
@@ -60,18 +65,13 @@ const styles = {
     paddingBottom: 30,
     alignItems: 'center', // center the content horizontally
     justifyContent: 'center', // center the content vertically
-    // borderColor: 'black',
-    // borderWidth: 1,
     flex: 1,
-    backgroundColor: 'rgba(68,70,84,1)',
     borderWidth: 1,
-    borderColor: 'gray',
     borderTopWidth: 0
   },
   prompt: {
     backgroundColor: 'black',
     padding: 15,
-    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 3,
     marginTop: 10,
@@ -80,7 +80,6 @@ const styles = {
   response: {
     backgroundColor: 'black',
     padding: 15,
-    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 3,
     marginTop: 10,
@@ -90,27 +89,21 @@ const styles = {
   promptText: {
     lineHeight: 30,
     fontSize: 20,
-    color: '#fff',
   },
   responseText: {
     lineHeight: 30,
     fontSize: 20,
-    color: '#fff', 
   },
   timestampText: {
     fontSize: 20,
     textAlign: 'center',
-    color: '#fff',
-    // marginTop: 10,
     padding: 5,
-    borderColor: 'gray',
     borderWidth: 1
   },
   headerText: {
     textAlign: 'left',
     width: Dimensions.get('window').width,
     paddingLeft: 12,
-    color: '#fff',
     marginTop: 10
   }
 }

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { ThemeContext } from '../themes/ThemeContext';
 
 const STORAGE_KEY = 'apiKey';
 
 const SettingsScreen = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const [apiKey, setApiKey] = useState('');
   const [recentlySaved, setRecentlySaved] = useState(false);
 
@@ -28,17 +30,18 @@ const SettingsScreen = () => {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, { backgroundColor: theme.bgPrimary }]}>
       <View style={styles.container}>
-        <Text style={styles.label}>API Key</Text>
+        <Text style={[styles.label, { color: theme.textPrimary }]}>API Key</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: theme.textPrimary, borderColor: theme.borderPrimary, backgroundColor: theme.bgSecondary }]}
           value={apiKey}
           onChangeText={setApiKey}
           secureTextEntry
         />
         <Button title="Save" onPress={handleSave} />
       </View>
+      <Button title="Toggle theme" onPress={toggleTheme}></Button>
         {recentlySaved && <Text style={styles.saved}>API key saved!</Text>}
     </View>
   );
@@ -47,9 +50,9 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     paddingTop: 20,
+    paddingHorizontal:10,
     flex: 1,
     gap: 15,
-    backgroundColor: 'rgba(68,70,84,1)'
   },
   container: {
     alignItems: 'center',
@@ -57,19 +60,15 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 28,
-    marginBottom: 10,
-    color: 'white'
+    marginBottom: 10  
   },
   input: {
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 4,
-    backgroundColor: 'black',
     paddingHorizontal: 10,
     width: '80%',
     marginBottom: 20,
     fontSize: 30,
-    color: 'white'
   },
   saved: {
     textAlign: 'center',

@@ -7,7 +7,7 @@ import * as Speech from 'expo-speech';
 
 const WelcomeScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [hasSetup, setHasSetup] = useState(false);
+  const [hasSetup, setHasSetup] = useState(true);
   const [apiKey, setApiKey] = useState('');
   const [date, setDate] = useState(new Date());
   const [opacity, setOpacity] = useState(new Animated.Value(0));

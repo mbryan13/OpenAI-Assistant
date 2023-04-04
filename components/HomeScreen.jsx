@@ -1,15 +1,24 @@
-import {useEffect, useState, useCallback } from 'react';
+import {useEffect, useContext, useState, useCallback } from 'react';
 import { StatusBar, StyleSheet, View, Image, Text, TouchableOpacity, TextInput, Button, Animated, SafeAreaView } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 import * as Speech from 'expo-speech';
 import Voice from '@react-native-voice/voice';
 import { Picker } from '@react-native-picker/picker';
+import { ThemeContext } from '../themes/ThemeContext';
+
+// import {
+//   GoogleSignin,
+//   GoogleSigninButton,
+//   statusCodes,
+// } from '@react-native-google-signin/google-signin';
 
 
 const STORAGE_KEY = 'apiKey';
 
 const HomeScreen = () => {
+  const { theme } = useContext(ThemeContext);
+  const navigation = useNavigation();
   const [apiKey, setApiKey] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [prompt, setPrompt] = useState('');
@@ -17,7 +26,7 @@ const HomeScreen = () => {
   const [response, setResponse] = useState('');
   const [awaiting, setAwaiting] = useState(false);
   const [model, setModel] = useState('gpt-3.5-turbo');
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(10);
   const [isTutorial, setIsTutorial] = useState();
   const tutorialMessages = ['Click on the logo to activate voice input.', 'The dropdown menu allows you to choose the OpenAI model to query.', 'Alternatively, type in your prompt in the input box.', 'Access settings and past logs in the top right corner.' ];
 
@@ -34,7 +43,6 @@ const HomeScreen = () => {
   });
 
 
-  const navigation = useNavigation();
 
   const handlePress = page => {
     navigation.navigate(page);
@@ -100,7 +108,6 @@ const HomeScreen = () => {
       const response = await submitQuery(url, body);
       setAwaiting(false);
       return response.choices[0].message.content;
-      // setResponse(response.choices[0].message.content);
     },
     'gpt-4': async () => {
       const url = 'https://api.openai.com/v1/chat/completions';
@@ -112,7 +119,6 @@ const HomeScreen = () => {
       const response = await submitQuery(url, body);
       setAwaiting(false);
       return response.choices[0].message.content;
-      // setResponse(response.choices[0].message.content);
     },
     'davinci': async () => {
       const url = 'https://api.openai.com/v1/completions';
@@ -124,7 +130,6 @@ const HomeScreen = () => {
       const response = await submitQuery(url, body);
       setAwaiting(false);
       return response.choices[0].text;
-      // setResponse(response.choices[0].text);
     }
   }
 
@@ -136,14 +141,18 @@ const HomeScreen = () => {
   const handleStep = () => {
     setStep(prevStep => prevStep + 1)
   }
-
+  
   return (
-    <SafeAreaView style={[StyleSheet.absoluteFillObject, styles.container]}>
-      <StatusBar barStyle="light-content" backgroundColor="black" />
-      {step >= 1 && step < 5 && <View style={styles.tutorialContainer}>
-        <Text style={styles.tutorialText}>{tutorialMessages[step - 1]}</Text>
-      </View>}
-      {step >= 1 && step < 5 && <TouchableOpacity style={[StyleSheet.absoluteFillObject, styles.overlay]} onPress={() => handleStep()}></TouchableOpacity>}
+    <SafeAreaView style={[StyleSheet.absoluteFillObject, styles.container, { backgroundColor: theme.bgPrimary }]}>
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
+      {step >= 1 && step < 5 && 
+        <View style={styles.tutorialContainer}>
+          <Text style={[styles.tutorialText, { color: theme.textPrimary }]}>{tutorialMessages[step - 1]}</Text>
+        </View>
+      }
+      {step >= 1 && step < 5 && 
+        <TouchableOpacity style={[StyleSheet.absoluteFillObject, styles.overlay]} onPress={() => handleStep()}></TouchableOpacity>
+      }
       <TouchableOpacity style={{...styles.logs, zIndex: step === 4 ? 2 : 0}} onPress={() => handlePress('Logs')}>
         <Image
           source={{uri: 'https://w7.pngwing.com/pngs/428/775/png-transparent-history-icon-order-icon-angle-text-rectangle.png'}}
@@ -164,9 +173,9 @@ const HomeScreen = () => {
             />
         </View>
       </TouchableOpacity>
-      <View pointerEvents={step > 0 && step < 5 ? 'none' : 'auto'} style={{...styles.pickerContainer, zIndex: step === 2 ? 2 : 1, backgroundColor: step === 2 ? 'white' : 'black'}}>
+      <View pointerEvents={step > 0 && step < 5 ? 'none' : 'auto'} style={{...styles.pickerContainer, zIndex: step === 2 ? 2 : 1, backgroundColor: step === 2 ? 'white' : theme.bgSecondary, borderColor: theme.borderPrimary }}>
         <Picker
-          style={styles.picker}
+          style={[styles.picker, {color: theme.textPrimary }]}
           selectedValue={model}
           onValueChange={(itemValue, itemIndex) => setModel(itemValue)}>
           <Picker.Item label="GPT-3.5" value="gpt-3.5-turbo" />
@@ -174,12 +183,11 @@ const HomeScreen = () => {
           <Picker.Item label="GPT-4" value="gpt-4" />
         </Picker>
       </View>
-      {/* <Text style={styles.text}>OpenAI</Text> */}
       <View pointerEvents={step > 0 && step < 5 ? 'none' : 'auto'} style={{...styles.inputContainer, zIndex: step === 3 ? 2 : 1}}>
         <TextInput
           multiline={true}
           value={prompt}
-          style={{...styles.input, zIndex: step === 3 ? 2 : 1, backgroundColor: step === 3 ? 'black' : 'black'}}
+          style={{...styles.input, zIndex: step === 3 ? 2 : 1, backgroundColor: step === 3 ? theme.bgSecondary : theme.bgSecondary, borderColor: theme.borderPrimary, color: theme.textPrimary}}
           onChangeText={setPrompt}
         />
         <TouchableOpacity onPress={() => handleSubmit()}>
@@ -201,8 +209,6 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: 'rgba(68,70,84,1)',
-    borderColor: 'rgba(255,255,255,0.5)',
     borderWidth: 1,
   },
   submitButton: {
@@ -220,9 +226,6 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   tutorialContainer: {
-    backgroundColor: 'rgba(68,70,84,1)',
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
     width: '90%',
     height: 100,
     position: 'absolute',
@@ -238,7 +241,6 @@ const styles = StyleSheet.create({
      color: 'white'
   },
   overlay: {
-    backgroundColor: 'black',
     opacity: .85,
     zIndex: 1
   },
@@ -250,8 +252,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 200,
-    // marginTop: 50,
-    // marginBottom: 15,
+    marginBottom: 25,
   },
   text: {
     fontSize: 25,
@@ -273,7 +274,6 @@ const styles = StyleSheet.create({
     top: 60,
   },
   pickerContainer: {
-    borderColor: 'rgba(255,255,255,0.5)',
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -283,7 +283,6 @@ const styles = StyleSheet.create({
   picker: {
     width: 150,
     height: 30,
-    color: 'white',
   },
   recording: {
     flexDirection: 'row',
@@ -294,12 +293,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '85%',
     borderRadius: 10,
-    marginTop: 30,
+    marginTop: 20,
   },
   input: {
     width: '100%',
     borderRadius: 10,
-    borderColor: 'rgba(255,255,255,0.5)',
     color: 'white',
     borderWidth: 1,
     height: 200, 
