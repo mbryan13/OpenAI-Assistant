@@ -42,39 +42,52 @@ const HomeScreen = () => {
     getApiKey();
   });
 
-
-
   const handlePress = page => {
     navigation.navigate(page);
   };
 
-  const handleSpeak = () => {
-    console.log('speak!');
-    Speech.speak('oh wow!');
-  }
+  const onSpeechRecognized = (result) => {
+    console.log('speech recognized: ', result);
+    setPrompt(result.value);
+  };
 
-  const handleStartRecording = async () => {
+  const startRecognizing = async () => {
     try {
-      setIsRecording(true);
       await Voice.start('en-US');
-      Voice.onSpeechResults = (event) => {
-        console.log('event: ', event);
-        setPrompt(event.value[0]);
-      };
+      console.log('Voice recognition started');
+      Voice.getSpeechRecognitionServices().then(services => console.log('services: ', services))
     } catch (error) {
-      console.log('handleStart error: ', error);
+      console.log('Error starting voice recognition', error);
     }
   };
 
-  const handleStopRecording = async () => {
+  const stopRecognizing = async () => {
     try {
-      setIsRecording(false);
       await Voice.stop();
-      Voice.removeAllListeners();
+      console.log('Voice recognition stopped');
     } catch (error) {
-      console.log('handleStop error: ', error);
+      console.log('Error stopping voice recognition', error);
     }
   };
+
+  const cancelRecognizing = async () => {
+    try {
+      await Voice.cancel();
+      console.log('Voice recognition cancelled');
+    } catch (error) {
+      console.log('Error cancelling voice recognition', error);
+    }
+  };
+
+  Voice.onSpeechStart = () => {
+    console.log('start!')
+    setIsRecording(true);
+  };
+  Voice.onSpeechEnd = () => {
+    console.log('end!');
+    setIsRecording(false);
+  }
+  Voice.onSpeechRecognized = onSpeechRecognized;
 
   const submitQuery = async (url, body) => {
     setAwaiting(true);
@@ -165,7 +178,7 @@ const HomeScreen = () => {
           style={styles.settings}
         />
       </TouchableOpacity>
-      <TouchableOpacity style={{zIndex: 2, backgroundColor: step === 1 ? 'white' : 'transparent', marginTop: 40}} onPress={handleStartRecording}>
+      <TouchableOpacity style={{zIndex: 2, backgroundColor: step === 1 ? 'white' : 'transparent', marginTop: 40}} onPress={startRecognizing}>
         <View style={styles.logoContainer}>
             <Image
               source={{uri: 'https://seeklogo.com/images/O/open-ai-logo-8B9BFEDC26-seeklogo.com.png'}}
@@ -197,9 +210,9 @@ const HomeScreen = () => {
       {isRecording && (
         <View style={styles.recording}>
           <Text>Recording...</Text>
-          <TouchableOpacity onPress={handleStopRecording}>
+          {/* <TouchableOpacity onPress={handleStopRecording}>
             <Text>Stop</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       )}
     </SafeAreaView>

@@ -14,7 +14,16 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "plugins": ["@react-native-google-signin/google-signin"],
+    "plugins": [
+      ["@react-native-google-signin/google-signin"],
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow OpenAIAssistant to access the microphone",
+          "speechRecognitionPermission": "Allow OpenAIAssistant to securely recognize user speech"
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true
     },

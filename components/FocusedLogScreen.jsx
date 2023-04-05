@@ -1,11 +1,10 @@
 import { useRef, useContext } from 'react';
-import { Color, Text, View, ScrollView, Dimensions, PanResponder, Animated } from 'react-native';
+import { Text, View, ScrollView, Dimensions, PanResponder, Animated } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { ThemeContext } from '../themes/ThemeContext';
 import { TinyColor } from '@ctrl/tinycolor';
 
 
-console.log('color: ', Color)
 
 
 const FocusedLogScreen = ({route}) => {
@@ -59,12 +58,12 @@ const styles = {
     flex: 1,
   },
   page: {
-    width: Dimensions.get('window').width, // width equal to the screen width
-    padding: 10, // add some padding to the page content
+    width: Dimensions.get('window').width,
+    padding: 10,
     paddingTop: 5,
     paddingBottom: 30,
-    alignItems: 'center', // center the content horizontally
-    justifyContent: 'center', // center the content vertically
+    alignItems: 'center',
+    justifyContent: 'center',
     flex: 1,
     borderWidth: 1,
     borderTopWidth: 0
@@ -84,7 +83,7 @@ const styles = {
     borderRadius: 3,
     marginTop: 10,
     marginBottom: 20,
-    flexGrow: 1 // add flexGrow: 1
+    flexGrow: 1
   },
   promptText: {
     lineHeight: 30,
@@ -107,6 +106,5 @@ const styles = {
     marginTop: 10
   }
 }
-
 
 export default FocusedLogScreen;
